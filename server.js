@@ -26,6 +26,7 @@ app.get('/', (req, res) => {
 app.get('/imageserver', (req, res) => {
     if(!req.query.id || !req.query.photo) return res.sendStatus(404)
     var exists = fs.existsSync(`${__dirname}/uploaded-files/${req.query.id}/${req.query.photo}`)
+    console.log(exists)
     if(!exists) return res.sendStatus(404)
     res.sendFile(`${__dirname}/uploaded-files/${req.query.id}/${req.query.photo}`)
 })

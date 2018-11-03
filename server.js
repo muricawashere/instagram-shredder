@@ -116,7 +116,7 @@ app.post('/process', fileUpload.single('image'), (req, res) => {
                         })
                     }
                     if(req.body.phonenum) {
-                        sendSMS
+                        sendSMS()
                     } else {
                         checkifDone()
                     }

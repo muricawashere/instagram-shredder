@@ -116,7 +116,7 @@ app.post('/process', fileUpload.single('image'), (req, res) => {
                         for(x=0;x<3;x++) {
                             gm(`${__dirname}/uploaded-files/${imageID}/${imagePath}`)
                                 .gravity(posCalc(rowNum, colNum))
-                                .crop(form, form)
+                                .crop(10, 10)
                                 .write(`${__dirname}/uploaded-files/${imageID}/${imageNameNum}.${fileExt}`, err => {
                                     if(err) throw err
                                 })

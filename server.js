@@ -96,7 +96,7 @@ app.post('/process', fileUpload.single('image'), (req, res) => {
                         fs.readdir(`${__dirname}/uploaded-files/${imageID}`, (err, files) => {
                             if(err) throw err
                             if(files.length == 10) {
-                                fs.unlink(`${__dirname}/uploadded-files/${imageID}/${imagePath}`, err => {
+                                fs.unlink(`${__dirname}/uploaded-files/${imageID}/${imagePath}`, err => {
                                     if(err) throw err
                                     for(i=1;i<10;i++) {
                                         console.log(i)

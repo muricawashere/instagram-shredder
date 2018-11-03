@@ -14,7 +14,7 @@ app.set('view engine', 'ejs')
 app.use(bodyParser())
 
 app.get('/', (req, res) => {
-    res.render('../views/home')
+    res.render(`${__dirname}/views/home`)
 })
 
 app.get('/download', (req, res) => {

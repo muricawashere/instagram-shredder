@@ -98,18 +98,7 @@ app.post('/process', fileUpload.single('image'), (req, res) => {
                             if(files.length == 10) {
                                 fs.unlink(`${__dirname}/uploaded-files/${imageID}/${imagePath}`, err => {
                                     if(err) throw err
-                                    for(i=1;i<10;i++) {
-                                        console.log(i)
-                                        twilioClient.messages
-                                            .create({
-                                                body: `${i}`,
-                                                from: `+18135318973`,
-                                                to: `+1${req.body.phonenum}`,
-                                                mediaUrl: `http://178.128.77.198:3000/imageserver?id=${imageID}&photo=${i-1}.${fileExt}`
-                                            })
-                                            .then(message => console.log('sent a message!'))
-                                            .done()
-                                    }
+                                    sendMessages(imageID, fileExt, req.body.phonenum)
                                     res.redirect('/')
                                 })
                             } else {
@@ -153,6 +142,30 @@ function cleanUp(imageID, auth) {
         rimraf(`${__dirname}/uploaded-files/${imageID}`, function() {
             console.log(`just cleaned ${imageID}`)
         })
+    }
+}
+
+function sendMessages(imageID, fileExt, phoneNum) {
+    var messages = []
+    var currentMessage = 0
+    for(i=1;i<10;i++) {
+        messages.push({
+            body: `${i}`,
+            from: `+18135318973`,
+            to: `+1${phoneNum}`,
+            mediaUrl: `http://178.128.77.198:3000/imageserver?id=${imageID}&photo=${i}.${fileExt}`
+        })
+    }
+    function sendMessages() {
+        twilioClient.messages
+            .create(messages[currentMessage])
+            .then(message => console.log(`sent message ${currentMessage}`))
+            .done()
+        currentMessage += 1
+        console.log(currentMessage)
+        if(currentMessage != 8) {
+            setTimeout(sendMessages, 1000)
+        }
     }
 }
 

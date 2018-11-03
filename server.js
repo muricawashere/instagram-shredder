@@ -166,7 +166,7 @@ function sendMessages(imageID, fileExt, phoneNum) {
             .done()
         currentMessage += 1
         console.log(currentMessage)
-        if(currentMessage[currentMessage]) {
+        if(toSend[currentMessage]) {
             setTimeout(send, 1000)
         }
     }

@@ -1,0 +1,40 @@
+<html>
+    <head>
+        <title>Instagram Shredder</title>
+        <style>
+            #header{
+                height: 50px;
+                border-bottom: solid black 1px;
+            }
+            #header h1{
+                font-size: 35px;
+            }
+            form{
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="header">
+            <h1>Instagram Shredder</h1>
+        </div>
+        <div id="body">
+            <form method="POST" enctype="multipart/form-data" action="/process">
+                <input type="file" name="image">
+                <div id="textorsms">
+                    <button type="button" id="left">Download</button>
+                    <button type="button" id="right">Text</button>
+                </div>
+                <div id="empty"></div>
+            </form>
+        </div>
+    </body>
+    <script>
+        document.getElementById('left').onclick = () => {
+            document.getElementById('empty').innerHTML = '<button>Go!</button>'
+        }
+        document.getElementById('right').onclick = () => {
+            document.getElementById('empty').innerHTML = '<input name="phonenum" type="tel"><button>Go!</button>'
+        }
+    </script>
+</html>

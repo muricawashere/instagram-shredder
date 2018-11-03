@@ -146,6 +146,18 @@ function cleanUp(imageID, auth) {
     }
 }
 
+function cleanSMS(imageID, auth) {
+    if(auth == false) {
+        setTimeout(function() {
+            cleanSMS(imageID, true)
+        }, 3000)
+    } else {
+        rimraf(`${__dirname}/uploaded-files/${imageID}`, function() {
+            console.log('cleaned up a sms photo')
+        })
+    }
+}
+
 function sendMessages(imageID, fileExt, phoneNum) {
     var toSend = []
     var currentMessage = 0
@@ -168,6 +180,8 @@ function sendMessages(imageID, fileExt, phoneNum) {
         console.log(currentMessage)
         if(toSend[currentMessage]) {
             setTimeout(send, 1000)
+        } else {
+            cleanSMS(imageID, false)
         }
     }
 }

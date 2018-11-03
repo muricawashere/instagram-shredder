@@ -158,6 +158,7 @@ function sendMessages(imageID, fileExt, phoneNum) {
         })
         console.log(toSend)
     }
+    send()
     function send() {
         twilioClient.messages
             .create(toSend[currentMessage])

@@ -96,20 +96,22 @@ app.post('/process', fileUpload.single('image'), (req, res) => {
                         fs.readdir(`${__dirname}/uploaded-files/${imageID}`, (err, files) => {
                             if(err) throw err
                             if(files.length == 10) {
-                                fs.unlinkSync(`${__dirname}/uploadded-files/${imageID}/${imagePath}`)
-                                for(i=1;i<10;i++) {
-                                    console.log(i)
-                                    twilioClient.messages
-                                        .create({
-                                            body: `${i}`,
-                                            from: `+18135318973`,
-                                            to: `+1${req.body.phonenum}`,
-                                            mediaUrl: `http://178.128.77.198:3000/imageserver?id=${imageID}&photo=${i-1}.${fileExt}`
-                                        })
-                                        .then(message => console.log('sent a message!'))
-                                        .done()
-                                }
-                                res.redirect('/')
+                                fs.unlink(`${__dirname}/uploadded-files/${imageID}/${imagePath}`, err => {
+                                    if(err) throw err
+                                    for(i=1;i<10;i++) {
+                                        console.log(i)
+                                        twilioClient.messages
+                                            .create({
+                                                body: `${i}`,
+                                                from: `+18135318973`,
+                                                to: `+1${req.body.phonenum}`,
+                                                mediaUrl: `http://178.128.77.198:3000/imageserver?id=${imageID}&photo=${i-1}.${fileExt}`
+                                            })
+                                            .then(message => console.log('sent a message!'))
+                                            .done()
+                                    }
+                                    res.redirect('/')
+                                })
                             } else {
                                 setTimeout(sendSMS, 500)
                             }

@@ -156,7 +156,7 @@ function sendMessages(imageID, fileExt, phoneNum) {
             mediaUrl: `http://178.128.77.198:3000/imageserver?id=${imageID}&photo=${i}.${fileExt}`
         })
     }
-    function sendMessages() {
+    function send() {
         twilioClient.messages
             .create(messages[currentMessage])
             .then(message => console.log(`sent message ${currentMessage}`))
@@ -164,7 +164,7 @@ function sendMessages(imageID, fileExt, phoneNum) {
         currentMessage += 1
         console.log(currentMessage)
         if(currentMessage != 8) {
-            setTimeout(sendMessages, 1000)
+            setTimeout(send, 1000)
         }
     }
 }

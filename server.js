@@ -146,19 +146,20 @@ function cleanUp(imageID, auth) {
 }
 
 function sendMessages(imageID, fileExt, phoneNum) {
-    var messages = []
+    var toSend = []
     var currentMessage = 0
     for(i=1;i<10;i++) {
-        messages.push({
+        toSend.push({
             body: `${i}`,
             from: `+18135318973`,
             to: `+1${phoneNum}`,
             mediaUrl: `http://178.128.77.198:3000/imageserver?id=${imageID}&photo=${i}.${fileExt}`
         })
+        console.log(messages)
     }
     function send() {
         twilioClient.messages
-            .create(messages[currentMessage])
+            .create(toSend[currentMessage])
             .then(message => console.log(`sent message ${currentMessage}`))
             .done()
         currentMessage += 1

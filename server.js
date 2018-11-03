@@ -10,6 +10,12 @@ var fileUpload = multer({dest: './uploaded-files'})
 var app = express()
 var PNGJS = require('pngjs').PNG
 
+var MY_IP = `178.128.77.198`
+
+var TWILIO_SID = 'ACbdc2d8dc78c436b425110a3c8ac099e9'
+var TWILIO_TOKEN = '762334147c22ec15acb29e1d5c27193a'
+var twilioClient = require('twilio')(TWILIO_SID, TWILIO_TOKEN)
+
 app.set('view engine', 'ejs')
 app.use(bodyParser())
 
@@ -17,12 +23,19 @@ app.get('/', (req, res) => {
     res.render(`${__dirname}/views/home`)
 })
 
+app.get('/imageserver', (req, res) => {
+    if(!req.query.id || !req.query.photo) return res.sendStatus(404)
+    var exists = fs.existsSync(`${__dirname}/uploaded-files/${req.query.id}/${req.query.photo}`)
+    if(!exists) return res.sendStatus(404)
+    res.sendFile(`${__dirname}/uploaded-files/${req.query.id}/${req.query.photo}`)
+})
+
 app.get('/download', (req, res) => {
     if(!req.query.id) return res.redirect('/')
     var exists = fs.existsSync(`${__dirname}/uploaded-files/${req.query.id}`)
     if(!exists) return res.redirect('/')
     res.sendFile(`${__dirname}/uploaded-files/${req.query.id}.zip`)
-    cleanUp(req.query.id, false)
+    //cleanUp(req.query.id, false)
 })
 
 app.post('/process', fileUpload.single('image'), (req, res) => {
@@ -79,7 +92,32 @@ app.post('/process', fileUpload.single('image'), (req, res) => {
                             }
                         })
                     }
-                    checkifDone()
+                    function sendSMS() {
+                        fs.readdir(`${__dirname}/uploaded-files/${imageID}`, (err, files) => {
+                            if(err) throw err
+                            if(files.length == 10) {
+                                fs.unlinkSync(`${__dirname}/uploadded-files/${imageID}/${imagePath}`)
+                                for(i=1;i<10;i++) {
+                                    twilioClient.messages
+                                        .create({
+                                            body: `${i}`,
+                                            from: `+18135318973`,
+                                            to: `+1${req.body.phonenum}`,
+                                            mediaUrl: `http://178.128.77.198:3000/imageserver?id=${imageID}&photo=${i-1}.${fileExt}`
+                                        })
+                                        .then(message => console.log('sent a message!'))
+                                        .done()
+                                }
+                            } else {
+                                setTimeout(sendSMS, 500)
+                            }
+                        })
+                    }
+                    if(req.body.phonenum) {
+
+                    } else {
+                        checkifDone()
+                    }
                     for(i=0;i<3;i++) {
                         for(x=0;x<3;x++) {
                             gm(`${__dirname}/uploaded-files/${imageID}/${imagePath}`)

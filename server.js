@@ -155,7 +155,7 @@ function sendMessages(imageID, fileExt, phoneNum) {
             to: `+1${phoneNum}`,
             mediaUrl: `http://178.128.77.198:3000/imageserver?id=${imageID}&photo=${i}.${fileExt}`
         })
-        console.log(messages)
+        console.log(toSend)
     }
     function send() {
         twilioClient.messages

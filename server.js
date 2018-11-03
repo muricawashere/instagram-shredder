@@ -98,6 +98,7 @@ app.post('/process', fileUpload.single('image'), (req, res) => {
                             if(files.length == 10) {
                                 fs.unlinkSync(`${__dirname}/uploadded-files/${imageID}/${imagePath}`)
                                 for(i=1;i<10;i++) {
+                                    console.log(i)
                                     twilioClient.messages
                                         .create({
                                             body: `${i}`,
@@ -108,13 +109,14 @@ app.post('/process', fileUpload.single('image'), (req, res) => {
                                         .then(message => console.log('sent a message!'))
                                         .done()
                                 }
+                                res.redirect('/')
                             } else {
                                 setTimeout(sendSMS, 500)
                             }
                         })
                     }
                     if(req.body.phonenum) {
-
+                        sendSMS
                     } else {
                         checkifDone()
                     }
